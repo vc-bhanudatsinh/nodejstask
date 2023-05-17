@@ -4,12 +4,12 @@ import * as pizzaController from "../controllers/pizzaController.js";
 
 const pizzaRouter = express.Router();
 
-pizzaRouter.get("/getitem", pizzaController.getPizza);
+pizzaRouter.get("/item", pizzaController.getPizza);
 
-pizzaRouter.post("/createitem", pizzaController.createPizzaItem);
+pizzaRouter.post("/item", pizzaController.createPizzaItem);
 
-pizzaRouter.delete("/deleteitem", pizzaController.deletePizzaItem);
+pizzaRouter.delete("/item", pizzaController.deletePizzaItem);
 
-pizzaRouter.patch("/updateitem", pizzaController.updatePizzaItem);
+pizzaRouter.patch("/item", pizzaController.updatePizzaItem);
 
 export default pizzaRouter;

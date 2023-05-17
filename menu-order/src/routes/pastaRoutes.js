@@ -4,12 +4,12 @@ import * as pastaController from "../controllers/pastaController.js";
 
 const pastaRouter = express.Router();
 
-pastaRouter.get("/getitem", pastaController.getPasta);
+pastaRouter.get("/item", pastaController.getPasta);
 
-pastaRouter.post("/createitem", pastaController.createPastaItem);
+pastaRouter.post("/item", pastaController.createPastaItem);
 
-pastaRouter.delete("/deleteitem", pastaController.deletePastaItem);
+pastaRouter.delete("/item", pastaController.deletePastaItem);
 
-pastaRouter.patch("/updateitem", pastaController.updatePastaItem);
+pastaRouter.patch("/item", pastaController.updatePastaItem);
 
 export default pastaRouter;
