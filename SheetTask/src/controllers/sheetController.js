@@ -20,7 +20,11 @@ const checkUniqueProperty = (property, data) => {
   for (let i = 0; i < data.length; i++) {
     const checkUser = data[i];
     const isUnique = resultData.find((user) => {
-      if (user[property] === checkUser[property]) return user;
+      if (
+        user[property] === checkUser[property] &&
+        user["sheetName"] === checkUser["sheetName"]
+      )
+        return user;
     });
     console.log("isUnique", isUnique);
     if (isUnique) return "Not Valid";
