@@ -1,39 +1,29 @@
-import * as helper from "../utils/helper.js";
 export const addUser = async (req, res, next) => {
   try {
-    const { name, email, sheetName, id } = req.body;
-    if (!name || !email || !sheetName || !id)
+    const { data, unique } = req.body;
+    if (!data || !unique)
       return res.status(400).send({ message: "Some Body Params are missing" });
-    if (isNaN(id) || typeof id === "string")
-      return res.status(400).send({ message: "id should be number only" });
-    const dbData = await helper.getFileData();
-    const sheetData = dbData.filter((user) => user.sheetName === sheetName);
-    console.log("sheetData", sheetData);
-    if (sheetData === []) {
-      dbData.push({ sheetName, name, email, id });
-      await helper.writeDataInDb(dbData, res);
-      return res.status(200).send({ message: "User added Successfully" });
+    if (data.length === 1) return res.send({ message: "Valid Data" });
+    for (let i = 0; i < unique.length; i++) {
+      const result = checkUniqueProperty(unique[i], data);
+      if (result) return res.status(200).send({ message: result });
     }
-    const emailData = sheetData.find((user) => user.email === email);
-    if (emailData)
-      return res.status(409).send({ message: "Email already exists" });
-    const idData = sheetData.find((user) => user.id === id);
-    if (idData) return res.status(409).send({ message: "id already exists" });
-    dbData.push({ sheetName, name, email, id });
-    await helper.writeDataInDb(dbData, res);
-    res.send({ message: "User added Successfully" });
+    return res.send({ message: "Valid Data" });
   } catch (error) {
     console.log("error", error);
     res.status(500).send({ message: error.message });
   }
 };
 
-export const getUser = async (req, res) => {
-  try {
-    const dbData = await helper.getFileData();
-    return res.status(200).send({ data: dbData });
-  } catch (error) {
-    console.log("error", error);
-    return res.status(500).send({ message: error.message });
+const checkUniqueProperty = (property, data) => {
+  const resultData = [];
+  for (let i = 0; i < data.length; i++) {
+    const checkUser = data[i];
+    const isUnique = resultData.find((user) => {
+      if (user[property] === checkUser[property]) return user;
+    });
+    console.log("isUnique", isUnique);
+    if (isUnique) return "Not Valid";
+    resultData.push(checkUser);
   }
 };
