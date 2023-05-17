@@ -1,9 +1,6 @@
-import dotenv from "dotenv";
 import path from "path";
 import * as fsPromise from "fs/promises";
 import * as fs from "fs";
-
-dotenv.config();
 
 const dbPath = path.join(path.resolve(), process.env.DB_PATH);
 

@@ -1,10 +1,7 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import dotenv from "dotenv";
 
 import * as helper from "../utils/helper.js";
-
-dotenv.config();
 
 export const loginUser = async (req, res, next) => {
   try {
