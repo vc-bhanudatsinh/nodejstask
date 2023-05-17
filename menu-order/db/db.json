@@ -1,0 +1,9 @@
+{
+  "pizza": [
+    { "itemId": 1234, "name": "cheezy7", "price": 20 },
+    { "itemId": 1235, "name": "Italino Burger", "price": 300 },
+    { "itemId": 1236, "name": "Italino Puff Pizzeria", "price": 320 }
+  ],
+  "burger": [{ "itemId": 1235, "name": "Italino Burger", "price": 213 }],
+  "pasta": [{ "itemId": 1235, "name": "Italino Pasta", "price": 123 }]
+}
