@@ -6,7 +6,13 @@ dotenv.config();
 
 const dbFilePath = process.env.DB_PATH;
 
-export const handleResponseSend = async (res, message, code) => {
+export const handleResponseSend = async (
+  res,
+  message = undefined,
+  code,
+  data = undefined
+) => {
+  if (!message) return res.status(code).send({ data });
   return res.status(code).send({ message });
 };
 
@@ -19,10 +25,10 @@ export const getFileData = async (res) => {
     }
 
     // return users data from file.
-    let fileData = await fsPromise.readFile(dbFilePath, {
+    const fileData = await fsPromise.readFile(dbFilePath, {
       encoding: "utf-8",
     });
-    return (fileData = JSON.parse(fileData));
+    return JSON.parse(fileData);
   } catch (error) {
     return error;
   }
