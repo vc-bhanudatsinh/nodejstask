@@ -1,5 +1,6 @@
 import express from "express";
 import cors from "cors";
+import path from "path";
 import session from "express-session";
 import sessionStoreFile from "session-file-store";
 import cookieParser from "cookie-parser";
@@ -30,7 +31,9 @@ app.use(
       secure: false,
       maxAge: 900000000,
     },
-    store: new storeFile(),
+    store: new storeFile({
+      path: path.join(path.resolve(), ".../sessions"),
+    }),
   })
 );
 

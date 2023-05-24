@@ -7,23 +7,31 @@ export const signUp = async (req, res) => {
     const sessionId = req.cookies["connect.sid"];
     if (req.session.user && sessionId)
       return res.status(200).send({ message: "You are already logged In" });
+
     const { email, password, name, phoneNo } = req.body;
     console.log("email", email, name, password, phoneNo);
+
     if (!email || !password || !name || !phoneNo)
       return res.status(400).send({ message: "Some Body Params are missing" });
+
     req.session.user = {
       name,
       email,
       id: Math.random() * 1000,
     };
+
     const userData = await helper.getUserDb();
+
     const isUserExist = userData.find((user) => user.email === email);
+
     if (isUserExist)
       return res.status(409).send({ message: "User already exists" });
-    // const user = { email, phoneNo, name, password };
+
     req.session["user"] = { email, name };
+
     const hashPassword = await bcrypt.hash(password, 10);
     userData.push({ name, email, password: hashPassword, phoneNo });
+
     await helper.writDataInDb(userData);
     return res.status(200).send({ message: "Sign Up Successfully" });
   } catch (error) {
@@ -38,16 +46,20 @@ export const getDashboard = async (req, res) => {
   try {
     const sessionId = req.cookies["connect.sid"];
     console.log("req.session.user", req.session.user);
-    if (!req.session.user && !sessionId)
+
+    if (!req.session.user || !sessionId)
       return res.status(403).send({ message: "Please Log-In First" });
+
     const userData = await helper.getUserDb();
     console.log("req.session.user", req.session.user.email);
+
     const user = userData.find((user) => {
       if (user.email === req.session.user.email) {
         delete user.password;
         return user;
       }
     });
+
     console.log("user", user);
     return res.status(200).send({ data: user });
   } catch (error) {
@@ -55,6 +67,31 @@ export const getDashboard = async (req, res) => {
     res.status(500).send({
       message: error.message,
     });
+  }
+};
+
+export const logOut = async (req, res) => {
+  try {
+    const user = req.session.user;
+    const sessionId = req.cookies["connect.sid"];
+    console.log("user", user, sessionId);
+    if (!sessionId || !user)
+      return res.status(403).send({ message: "LoggedIn Successfully" });
+    await req.session.destroy();
+    return res.status(200).send({ message: "logout Successfully" });
+  } catch (error) {
+    console.log("error", error);
+    res.status(500).send({ message: error.message });
+  }
+};
+export const renderSignUp = async (req, res) => {
+  try {
+    res
+      .status(200)
+      .sendFile(path.join(path.resolve(), "./src/public/index.html"));
+  } catch (error) {
+    console.log("error", error);
+    res.status(500).send({ message: error.message });
   }
 };
 
@@ -79,6 +116,7 @@ export const renderDashboard = async (req, res) => {
     res.status(500).send({ message: error.message });
   }
 };
+
 export const login = async (req, res) => {
   try {
     const sessionId = req.cookies["connect.sid"];
@@ -101,7 +139,7 @@ export const login = async (req, res) => {
 
     req.session["user"] = { email: userFound.email, name: userFound.name };
 
-    return res.status(200).redirect("dashboard");
+    return res.status(200).send({ message: "loggedIn Successfully" });
   } catch (error) {
     console.log("error", error);
     res.status(500).send({
