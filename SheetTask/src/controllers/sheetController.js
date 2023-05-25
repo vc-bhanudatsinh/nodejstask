@@ -1,3 +1,11 @@
+/**
+ * @function addUser - API controller to handle the req and res
+ * @param {json} req
+ * @param {json} res
+ * @param {function} next
+ * @returns {void}
+ */
+
 export const addUser = async (req, res, next) => {
   try {
     const { data, unique } = req.body;
@@ -10,24 +18,29 @@ export const addUser = async (req, res, next) => {
     }
     return res.send({ message: "Valid Data" });
   } catch (error) {
-    console.log("error", error);
     res.status(500).send({ message: error.message });
   }
 };
+
+/**
+ *
+ * @param {string} property - unique property to check
+ * @param {array} data - Array of json data from request
+ * @returns {string | void} - returns string if there is invalid data else nothing
+ */
 
 const checkUniqueProperty = (property, data) => {
   const resultData = [];
   for (let i = 0; i < data.length; i++) {
     const checkUser = data[i];
-    const isUnique = resultData.find((user) => {
+    const isDuplicate = resultData.find((user) => {
       if (
         user[property] === checkUser[property] &&
         user["sheetName"] === checkUser["sheetName"]
       )
         return user;
     });
-    console.log("isUnique", isUnique);
-    if (isUnique) return "Not Valid";
+    if (isDuplicate) return "Not Valid";
     resultData.push(checkUser);
   }
 };
