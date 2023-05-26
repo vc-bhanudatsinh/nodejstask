@@ -8,7 +8,7 @@ export const getUser = async (req, res, next) => {
       delete user["password"];
       return user;
     });
-    return res.status(200).send({ data: dbData });
+    return handleResponseSend(res, "User Fetched Successfully", 200, dbData);
   } catch (error) {
     return helper.handleResponseSend(res, error.message, 500);
   }

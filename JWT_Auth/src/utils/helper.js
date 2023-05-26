@@ -6,14 +6,8 @@ dotenv.config();
 
 const dbFilePath = process.env.DB_PATH;
 
-export const handleResponseSend = async (
-  res,
-  message = undefined,
-  code,
-  data = undefined
-) => {
-  if (!message) return res.status(code).send({ data });
-  return res.status(code).send({ message });
+export const handleResponseSend = async (res, message, code, data = []) => {
+  return res.status(code).send({ message, data });
 };
 
 export const getFileData = async (res) => {
@@ -30,7 +24,7 @@ export const getFileData = async (res) => {
     });
     return JSON.parse(fileData);
   } catch (error) {
-    return error;
+    return handleResponseSend(res, error.message, 500);
   }
 };
 

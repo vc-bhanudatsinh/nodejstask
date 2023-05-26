@@ -16,9 +16,9 @@ export const loginUser = async (req, res, next) => {
       { name: user.name, email: user.email },
       process.env.ACCESS_TOKEN_SECRET
     );
-    return res.status(200).send({ accessToken });
+    return helper.handleResponseSend(res, error.message, 500, { accessToken });
   } catch (error) {
-    return res.status(500).send({ message: error.message });
+    return helper.handleResponseSend(res, error.message, 500);
   }
 };
 
