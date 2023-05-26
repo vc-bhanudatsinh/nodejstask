@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Cookie Session Task - Home</title>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Home</h1>
+      <div class="user-details">
+        <ul>
+          <li><b>Name:</b> <span id="name">Bd jhala</span></li>
+          <li><b>Email:</b> <span id="email">bdjhala</span></li>
+          <li><b>phone:</b> <span id="phone">1234567890</span></li>
+        </ul>
+      </div>
+      <input type="submit" value="Log Out" id="logOut" />
+    </div>
+  </body>
+  <script>
+    const nameEl = document.getElementById("name");
+    const emailEl = document.getElementById("email");
+    const phoneEl = document.getElementById("phone");
+    (async () => {
+      const response = await fetch("http://localhost:3000/api/dashboard", {
+        method: "GET",
+      }).then((res) => {
+        if (res.status === 200) {
+          return res.json();
+        } else if (res.status === 403) {
+          window.location.href = "login";
+        }
+      });
+      console.log("response", response);
+      if (response.data) {
+        console.log("response.data", response.data);
+        const user = response.data;
+        nameEl.innerText = user.name;
+        emailEl.innerText = user.email;
+        phoneEl.innerText = user.phoneNo;
+      }
+    })();
+    const logOutEl = document.getElementById("logOut");
+    logOutEl.addEventListener("click", async (e) => {
+      e.preventDefault();
+      const response = await fetch("http://localhost:3000/api/logout", {
+        method: "GET",
+      });
+      const responseStatus = response.status;
+      console.log("responseStatus", responseStatus);
+      if (responseStatus === 200 || responseStatus === 403) {
+        window.location.href = "login";
+      }
+    });
+  </script>
+</html>

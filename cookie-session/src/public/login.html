@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Cookie Session Task - Login</title>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Login Form</h1>
+      <form>
+        <label for="email">Email</label>
+        <input type="email" name="email" id="email" />
+        <label for="password">Password</label>
+        <input type="password" name="password" id="password" />
+        <input type="submit" id="login" value="Login" />
+      </form>
+    </div>
+  </body>
+  <script>
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
+    const loginEl = document.getElementById("login");
+    loginEl.addEventListener("click", (e) => {
+      e.preventDefault();
+      loginApi();
+    });
+    const loginApi = async () => {
+      const user = {
+        password: passwordInput.value,
+        email: emailInput.value,
+      };
+      const response = await fetch("http://localhost:3000/api/login", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Credentials": true,
+        },
+
+        body: JSON.stringify(user),
+      });
+      console.log("response", response);
+      const responseStatus = response.status;
+      if (responseStatus === 200) {
+        window.location.href = "/api/home";
+        console.log(response);
+      }
+    };
+  </script>
+</html>
