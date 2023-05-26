@@ -11,7 +11,6 @@ export const getUserDb = async () => {
     const fileData = await fsPromises.readFile(dbPath, { encoding: "utf-8" });
     return JSON.parse(fileData);
   } catch (error) {
-    console.log("error", error);
     return error;
   }
 };
@@ -22,7 +21,6 @@ export const writDataInDb = async (data) => {
       encoding: "utf-8",
     });
   } catch (error) {
-    console.log("error", error);
     return error;
   }
 };

@@ -9,7 +9,6 @@ export const signUp = async (req, res) => {
       return res.status(200).send({ message: "You are already logged In" });
 
     const { email, password, name, phoneNo } = req.body;
-    console.log("email", email, name, password, phoneNo);
 
     if (!email || !password || !name || !phoneNo)
       return res.status(400).send({ message: "Some Body Params are missing" });
@@ -35,7 +34,6 @@ export const signUp = async (req, res) => {
     await helper.writDataInDb(userData);
     return res.status(200).send({ message: "Sign Up Successfully" });
   } catch (error) {
-    console.log("error", error);
     res.status(500).send({
       message: error.message,
     });
@@ -45,13 +43,11 @@ export const signUp = async (req, res) => {
 export const getDashboard = async (req, res) => {
   try {
     const sessionId = req.cookies["connect.sid"];
-    console.log("req.session.user", req.session.user);
 
     if (!req.session.user || !sessionId)
       return res.status(403).send({ message: "Please Log-In First" });
 
     const userData = await helper.getUserDb();
-    console.log("req.session.user", req.session.user.email);
 
     const user = userData.find((user) => {
       if (user.email === req.session.user.email) {
@@ -60,10 +56,8 @@ export const getDashboard = async (req, res) => {
       }
     });
 
-    console.log("user", user);
     return res.status(200).send({ data: user });
   } catch (error) {
-    console.log("error", error);
     res.status(500).send({
       message: error.message,
     });
@@ -74,13 +68,11 @@ export const logOut = async (req, res) => {
   try {
     const user = req.session.user;
     const sessionId = req.cookies["connect.sid"];
-    console.log("user", user, sessionId);
     if (!sessionId || !user)
       return res.status(403).send({ message: "LoggedIn Successfully" });
     await req.session.destroy();
     return res.status(200).send({ message: "logout Successfully" });
   } catch (error) {
-    console.log("error", error);
     res.status(500).send({ message: error.message });
   }
 };
@@ -90,7 +82,6 @@ export const renderSignUp = async (req, res) => {
       .status(200)
       .sendFile(path.join(path.resolve(), "./src/public/index.html"));
   } catch (error) {
-    console.log("error", error);
     res.status(500).send({ message: error.message });
   }
 };
@@ -101,7 +92,6 @@ export const renderLogin = async (req, res) => {
       .status(200)
       .sendFile(path.join(path.resolve(), "./src/public/login.html"));
   } catch (error) {
-    console.log("error", error);
     res.status(500).send({ message: error.message });
   }
 };
@@ -112,7 +102,6 @@ export const renderDashboard = async (req, res) => {
       .status(200)
       .sendFile(path.join(path.resolve(), "./src/public/home.html"));
   } catch (error) {
-    console.log("error", error);
     res.status(500).send({ message: error.message });
   }
 };
@@ -120,7 +109,6 @@ export const renderDashboard = async (req, res) => {
 export const login = async (req, res) => {
   try {
     const sessionId = req.cookies["connect.sid"];
-    console.log("user logged in already", req.session.user);
     if (req.session.user && sessionId)
       return res.status(200).send({ message: "You are already logged In" });
 
@@ -133,7 +121,6 @@ export const login = async (req, res) => {
     if (!userFound) return res.status(404).send({ message: "No User found" });
 
     const isPasswordMatch = await bcrypt.compare(password, userFound.password);
-    console.log("isPasswordMatch", isPasswordMatch);
     if (!isPasswordMatch)
       return res.status(403).send({ message: "Password is incorrect" });
 
@@ -141,7 +128,6 @@ export const login = async (req, res) => {
 
     return res.status(200).send({ message: "loggedIn Successfully" });
   } catch (error) {
-    console.log("error", error);
     res.status(500).send({
       message: error.message,
     });
